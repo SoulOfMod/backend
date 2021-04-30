@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require("cors")
-const  countries  = require("./dataCountries.js")
+const countries = require("./dataCountries.js")
 
 const app = express();
 
@@ -15,6 +15,27 @@ app.get("/countries", function (req, res) {
     })
 })
 
+app.get('/countries/:country', (req, res) => {
+
+    const country = req.params.country.toUpperCase()
+
+    
+    const countryFind = []
+
+    for (let i = 0; i < countries.length; i++) {
+        const curCountry = countries[i];
+
+        if (curCountry.name.toUpperCase() === country) {
+            countryFind.push(curCountry)
+        }
+    }
+
+    console.log("country", countryFind);
+
+    res.json({
+        countryFind
+    })
+})
 
 app.listen(port, function () {
     console.log('Serveur lancé et en écoute dans le port: ' + port);
