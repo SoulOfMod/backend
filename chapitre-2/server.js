@@ -10,15 +10,14 @@ app.use(cors())
 const port = 9000
 
 app.get("/students", (req, res) => {
-console.log((students));
-    res.json(students)
+    res.json({students})
 })
 
 
 
 app.post("/students", (req, res) => {
     const newStudent = req.body
-    
+
     students.push(newStudent)
 
     res.json({

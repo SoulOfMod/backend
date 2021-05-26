@@ -15,10 +15,6 @@ const students = [
         id: 4,
         name : "Rosssssio"
     },
-    {
-        id: 5,
-        name : "Francasse-couille"
-    },
 ]
 
 
