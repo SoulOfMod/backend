@@ -84,13 +84,25 @@ app.post("/heros", (req, res) => {
 
 
 app.post("/heros/:id/powers", (req, res) => {
-    const newPower = req.body
+    // const newPower = req.body
 
-    heros.push(newPower)
+    // heros.push(newPower)
+
+    // res.json({
+    //     message: "Pouvoir ajouté!"
+    // })
+    const powers = req.body
+
+    const infoHero = superHeros.find(elem => {
+        if (elem.name.toLowerCase() === nameHero.toLowerCase()) {
+            return elem.name.power.push(...powers)
+        }
+    })
+
+    superHeros.push(newHero)
 
     res.json({
         message: "Pouvoir ajouté!"
-    })
 })
 
 // gestion d'erreurs
