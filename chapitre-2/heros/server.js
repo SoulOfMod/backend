@@ -46,11 +46,11 @@ app.get("/heros/:id", (req, res) => {
 
     // }
 
-    
+
 
     // console.log(herosGet);
 
-    const herosfind = heros.find(elem => elem.id === id) 
+    const herosfind = heros.find(elem => elem.id === id)
 
     res.json({
         herosfind
@@ -61,14 +61,14 @@ app.get("/heros/:id", (req, res) => {
 app.get("/heros/:id/powers", (req, res) => {
     const id = parseInt(req.params.id)
 
-    const herosfind = heros.find(elem => elem.id === id) 
-    const herospower = herosfind.power 
+    const herosfind = heros.find(elem => elem.id === id)
+    const herospower = herosfind.power
 
     // console.log(heros["power"]);
     // console.log(heros.power);
 
     res.json({
-    herospower
+        herospower
     })
 })
 
@@ -82,7 +82,6 @@ app.post("/heros", (req, res) => {
     })
 })
 
-
 app.post("/heros/:id/powers", (req, res) => {
     // const newPower = req.body
 
@@ -91,18 +90,19 @@ app.post("/heros/:id/powers", (req, res) => {
     // res.json({
     //     message: "Pouvoir ajouté!"
     // })
-    const powers = req.body
+    const id = parseInt(req.params.id)
+    const power = req.body.power
 
-    const infoHero = superHeros.find(elem => {
-        if (elem.name.toLowerCase() === nameHero.toLowerCase()) {
-            return elem.name.power.push(...powers)
+    const herofind = heros.find(elem => {
+        if (elem.id === id) {
+            return elem.power.push(power)
         }
     })
 
-    superHeros.push(newHero)
-
     res.json({
         message: "Pouvoir ajouté!"
+    })
+
 })
 
 // gestion d'erreurs
@@ -115,3 +115,5 @@ app.get('*', (req, res) => {
 app.listen(port, () => {
     console.log("Server à l'écoute dans le port " + port);
 })
+
+
