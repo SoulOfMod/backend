@@ -105,6 +105,49 @@ app.post("/heros/:id/powers", (req, res) => {
 
 })
 
+app.delete('/heros/:id', (req, res) => {
+
+    const id = parseInt(req.params.id)
+
+    if (id !== -1) {
+        heros.splice(id, 1);
+        res.json({
+            message: "Heros retiré!"
+        })
+    } else {
+        res.json({
+            message: "Erreur,ID introuvable!"
+        })
+    }
+});
+
+app.put('/heros/:id', (req, res) => {
+    const id = req.params;
+    const changeheros = req.body;
+
+    heros = heros.find(elem => elem.id == id);
+
+    heros.changeheros = changeheros;
+
+    res.json(heros);
+});
+
+app.delete("/heros/:id/powers", (req, res) => {
+    const id = parseInt(req.params.id)
+    const power = req.body.power
+
+    const herofind = heros.find(elem => {
+        if (elem.id === id) {
+            return elem.power.splice(power, 1)
+        }
+    })
+
+    res.json({
+        message: "Pouvoir ajouté!"
+    })
+
+})
+
 // gestion d'erreurs
 app.get('*', (req, res) => {
     res.json({
