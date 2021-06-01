@@ -13,9 +13,10 @@ const port = 8000
 
 function debug(req, res, next) {
     console.log("Je fais un console.log à chaque requête")
+    next()
 };
 
-
+app.use(debug)
 
 app.get('/', (req, res) => {
     res.send('Tape Heros dans la bar');
@@ -72,7 +73,16 @@ app.get("/heros/:id/powers", (req, res) => {
     })
 })
 
-app.post("/heros", (req, res) => {
+function transformName(req, res, next) {
+    if (req.body.name) {
+
+    }
+    req.body.name.toLowerCase()
+    next()
+};
+
+
+app.post("/heros", transformName, (req, res) => {
     const newHeros = req.body
 
     heros.push(newHeros)
@@ -122,14 +132,18 @@ app.delete('/heros/:id', (req, res) => {
 });
 
 app.put('/heros/:id', (req, res) => {
-    const id = req.params;
+    const id = parseInt(req.params.id);
+    // console.log(id);
     const changeheros = req.body;
 
-    heros = heros.find(elem => elem.id == id);
+    hero = heros.find(elem => elem.id == id);
 
-    heros.changeheros = changeheros;
 
-    res.json(heros);
+    // console.log(changeheros);
+    // console.log(hero);
+    hero.name = changeheros.name;
+
+    res.json(hero);
 });
 
 app.delete("/heros/:id/powers", (req, res) => {
