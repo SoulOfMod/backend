@@ -3,9 +3,8 @@ const cors = require("cors")
 const mongoose = require("mongoose")
 const Hotel = require("./model/Hotel")
 const Restaurant = require("./model/Restaurant")
-const { findById } = require("./model/Hotel")
 
-mongoose.connect("mongodb://localhost:27017/herosDB", (err) => {
+mongoose.connect("mongodb://localhost:27017/Trippy", (err) => {
     if (err) {
         console.error(err);
     } else {
@@ -58,16 +57,170 @@ app.get("/restaurants", async (req, res) => {
 
 app.get("/hotels/:id", async (req, res) => {
 
+    const id = req.params.id
+
     try {
-        const idhotel = req.params._id
-        const hotels = await findById()
+        const hotels = await Hotel.findById(id)
+        res.json(hotels)
+
+    } catch (err) {
+
+        console.error(err)
+
+        res.status(500).json({ errorMessage: "There was a problem :(" })
+    }
+
+})
+
+app.get("/restaurants/:id", async (req, res) => {
+
+    const id = req.params.id
+
+    try {
+        const restaurants = await Restaurant.findById(id)
+        res.json(restaurants)
+
+    } catch (err) {
+
+        console.error(err)
+
+        res.status(500).json({ errorMessage: "There was a problem :(" })
+    }
+
+})
+
+
+const findHotel = async (name) => {
+
+    try {
+        return await Hotel.findOne({
+            name
+        })
+    } catch (error) {
+
+    }
+}
+
+app.post("/hotels", async (req, res, next) => {
+
+    try {
+        const hotelBody = req.body
+        const hotel = await findHotel(hotelBody.name)
+
+        if (hotel) {
+            res.status(400).json({
+                message: "The hotel already exists"
+            })
+        } else {
+            next()
+        }
 
     } catch (err) {
         console.error(err)
 
         res.status(500).json({ errorMessage: "There was a problem :(" })
     }
+}, async (req, res) => {
 
+    try {
+        const hotel = req.body
+        // console.log(hotel);
+        const newhotel = await Hotel.create(hotel)
+        // console.log(newhotel);
+        res.json({
+            message: "Ok, hotel was created!",
+        })
+    } catch (err) {
+        console.error(err)
+
+        res.status(500).json({ errorMessage: "There was a problem :(" })
+    }
+
+})
+
+const findRestaurant = async (name) => {
+
+    try {
+        return await Restaurant.findOne({
+            name
+        })
+    } catch (error) {
+
+    }
+}
+
+
+app.post("/restaurants", async (req, res, next) => {
+
+    try {
+        const restaurantBody = req.body
+        const restaurant = await findRestaurant(restaurantBody.name)
+
+        if (restaurant) {
+            res.status(400).json({
+                message: "The restaurant already exists"
+            })
+        } else {
+            next()
+        }
+
+    } catch (err) {
+        console.error(err)
+
+        res.status(500).json({ errorMessage: "There was a problem :(" })
+    }
+}, async (req, res) => {
+    try {
+        const restaurant = req.body
+        // console.log(restaurant);
+        const newrestaurant = await Restaurant.create(restaurant)
+        // console.log(newrestaurant);
+        res.json({
+            message: "Ok, restaurant was created!",
+        })
+    } catch (err) {
+        console.error(err)
+
+        res.status(500).json({ errorMessage: "There was a problem :(" })
+    }
+
+})
+
+const replaceRestaurant = async (name) => {
+
+    try {
+        return await Restaurant.updateOne({ name })
+    } catch (error) {
+
+    }
+}
+
+app.put("/restaurants/:id", async (req, res, next) => {
+
+    try {
+        const restaurantId = req.params.id
+        const restaurantQuery = req.query
+        console.log("id", restaurantId);
+        console.log("Query", restaurantQuery);
+        console.log("Query name", restaurantQuery.name);
+        const restaurant = await Restaurant.find({ _id: restaurantId })
+        console.log(restaurant);
+        console.log(restaurant[0].name);
+
+        await replaceRestaurant({ name: restaurantQuery.name })
+
+        if (restaurant) {
+            res.json({
+                message: `The restaurant's name is updated to ${restaurantQuery.name}`
+            })
+        }
+
+
+    } catch (err) {
+        console.error(err)
+
+        res.status(500).json({ errorMessage: "There was a problem :(" })
+    }
 })
 
 
