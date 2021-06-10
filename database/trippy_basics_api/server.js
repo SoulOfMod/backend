@@ -186,28 +186,48 @@ app.post("/restaurants", async (req, res, next) => {
 
 })
 
-const replaceRestaurant = async (name) => {
+app.put("/hotels/:id", async (req, res) => {
 
     try {
-        return await Restaurant.updateOne({ name })
-    } catch (error) {
+        const hotelId = req.params.id
+        const hotelQuery = req.query
+        // console.log("id", hotelId);
+        // console.log("Query", hotelQuery);
+        // console.log("Query name", hotelQuery.name);
+        const hotel = await Hotel.findOneAndUpdate({ _id: hotelId },
+            { $set: {name: hotelQuery.name } },
+            { new: true }
+        )
 
+
+        if (hotel) {
+            res.json({
+                message: `The hotel's name is updated to ${hotelQuery.name}`
+            })
+        }
+
+
+    } catch (err) {
+        console.error(err)
+
+        res.status(500).json({ errorMessage: "There was a problem :(" })
     }
-}
+})
 
-app.put("/restaurants/:id", async (req, res, next) => {
+
+app.put("/restaurants/:id", async (req, res) => {
 
     try {
         const restaurantId = req.params.id
         const restaurantQuery = req.query
-        console.log("id", restaurantId);
-        console.log("Query", restaurantQuery);
-        console.log("Query name", restaurantQuery.name);
-        const restaurant = await Restaurant.find({ _id: restaurantId })
-        console.log(restaurant);
-        console.log(restaurant[0].name);
+        // console.log("id", restaurantId);
+        // console.log("Query", restaurantQuery);
+        // console.log("Query name", restaurantQuery.name);
+        const restaurant = await Restaurant.findOneAndUpdate({ _id: restaurantId },
+            { $set: {name: restaurantQuery.name } },
+            { new: true }
+        )
 
-        await replaceRestaurant({ name: restaurantQuery.name })
 
         if (restaurant) {
             res.json({
