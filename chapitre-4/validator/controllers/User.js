@@ -1,6 +1,8 @@
 const express = require("express")
 const router = express.Router()
 const User = require("./models/User")
+const { body } = require('express-validator');
+const expressValidator = require("express-validator");
 
 router.get("/users", async (req, res) => {
     try {

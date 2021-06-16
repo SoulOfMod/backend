@@ -2,8 +2,6 @@ const express = require("express")
 const cors = require("cors")
 const mongoose = require("mongoose")
 const usersRoutes = require("./controllers/user")
-const { body } = require('express-validator');
-const expressValidator = require("express-validator");
 
 
 mongoose.connect("mongodb://localhost:27017/users", (err) => {
