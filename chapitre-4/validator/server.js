@@ -38,7 +38,7 @@ app.get("/users", async (req, res) => {
 
 })
 
-app.get("/users/username/:username", async (req, res) => {
+app.get("/users/:username", async (req, res) => {
 
     const userGet = req.params
     console.log(req.params);
