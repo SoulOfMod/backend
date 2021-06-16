@@ -1,9 +1,10 @@
 const express = require("express")
 const cors = require("cors")
 const mongoose = require("mongoose")
-const usersRoutes = require("./controllers/user")
-const userModel = require("../models/user")
-const router = express.Router()
+// const usersRoutes = require("./controllers/user")
+const User = require("./models/User")
+const { body } = require('express-validator');
+
 
 mongoose.connect("mongodb://localhost:27017/users", (err) => {
     if (err) {
@@ -20,41 +21,30 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
-app.use("/users", usersRoutes)
+// app.use("/users", usersRoutes)
 
-router.post("/users/add", debug, async (req, res) => {
-    try {
-        const newUser = req.body
 
-        const student = new userModel({
-            name: newUser.name,
-            email: newUser.email,
-            age: newUser.age,
-            city: newUser.city
-        })
-
-        const userSaved = await user.save()
-
-        res.json({
-            message: "The user was saved correctly",
-            newUser
-        })
-
-    } catch (error) {
-        console.error("Error in POST /users", error)
-
-        res.json({
-            message: "The user was not saved :("
-        })
+app.post('/users/add',
+    body("username").exists().isLength({ min: 4 }),
+    body("mail").exists().isEmail(),
+    body("age").exists().isNumeric().isLength({ min: 2 }),
+    body("city").isIn(['Paris', 'Tokyo', 'Los Angeles']),
+    (req, res) => {
+        const errors = expressValidator.validationResult(req);
+        if (!errors.isEmpty()) {
+            res.status(500).json({
+                errors: errors.array(),
+                message: 'there is a problem'
+            });
+            return;
+        } else {
+            res.json({
+                success: true,
+                message: 'User will be saved'
+            });
+        }
     }
-
-})
-
-const debug = (req, res, next) => {
-    console.log("I received a request on user controller")
-    console.log(`The route is: ${req.originalUrl} and the method is ${req.method}`)
-    next()
-}
+);
 
 
 app.listen(port, () => {
