@@ -50,11 +50,11 @@ const getEmail = async (req, res) => {
 
 const getId = async (req, res) => {
 
-    const userFound = req.params
+    const userFound = req.params.id
     console.log(req.params);
     console.log(req.params.id);
     try {
-        const users = await userModel.find(userFound)
+        const users = await userModel.findById(userFound)
 
         res.json(users)
     } catch (err) {
