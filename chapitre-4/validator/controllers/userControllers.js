@@ -1,12 +1,11 @@
 const express = require("express")
 const router = express.Router()
-const User = require("./models/User")
-const { body } = require('express-validator');
+const userModel = require("../models/userModel")
 const expressValidator = require("express-validator");
 
 router.get("/users", async (req, res) => {
     try {
-        const users = await User.find({})
+        const users = await userModel.find({})
 
         res.json(users)
     } catch (err) {
@@ -23,7 +22,7 @@ router.get("/users/:username", async (req, res) => {
     console.log(req.params);
     console.log(req.params.username);
     try {
-        const users = await User.find(userGet)
+        const users = await userModel.find(userGet)
 
         res.json(users)
     } catch (err) {
@@ -40,7 +39,7 @@ router.get("/users/email/:email", async (req, res) => {
     console.log(req.params);
     console.log(req.params.email);
     try {
-        const users = await User.find(userFound)
+        const users = await userModel.find(userFound)
 
         res.json(users)
     } catch (err) {
@@ -53,10 +52,6 @@ router.get("/users/email/:email", async (req, res) => {
 
 
 router.post('/users/add',
-    body("username").exists().isLength({ min: 4 }),
-    body("email").exists().isEmail(),
-    body("age").exists().isNumeric().isLength({ min: 2 }),
-    body("city").isIn(['Paris', 'Tokyo', 'Los Angeles']),
     (req, res) => {
         const errors = expressValidator.validationResult(req);
         if (!errors.isEmpty()) {
@@ -67,7 +62,7 @@ router.post('/users/add',
             return;
         } else {
             const user = req.body
-            const newUser = User.create(user)
+            const newUser = userModel.create(user)
 
             res.json({
                 success: true,
@@ -76,3 +71,11 @@ router.post('/users/add',
         }
     }
 );
+
+
+module.exports = {
+    getUsers,
+    getUser,
+    getEmail,
+    addUser
+}
