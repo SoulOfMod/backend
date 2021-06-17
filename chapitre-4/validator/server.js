@@ -1,7 +1,7 @@
 const express = require("express")
 const cors = require("cors")
 const mongoose = require("mongoose")
-const usersRoutes = require("./controllers/user")
+const usersRoutes = require("./routes/userRoutes")
 
 
 mongoose.connect("mongodb://localhost:27017/users", (err) => {
