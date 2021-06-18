@@ -40,8 +40,37 @@ const addHotel = async (req, res) => {
     }
 }
 
+const changeHotel = async (req, res) => {
+
+    try {
+        const hotelId = req.params.id
+        const hotelQuery = req.query
+        // console.log("id", hotelId);
+        // console.log("Query", hotelQuery);
+        // console.log("Query name", hotelQuery.name);
+        const hotel = await Hotel.findOneAndUpdate({ _id: hotelId },
+            { $set: {name: hotelQuery.name } },
+            { new: true }
+        )
+
+
+        if (hotel) {
+            res.json({
+                message: `The hotel's name is updated to ${hotelQuery.name}`
+            })
+        }
+
+
+    } catch (err) {
+        console.error(err)
+
+        res.status(500).json({ errorMessage: "There was a problem :(" })
+    }
+}
+
 module.exports = {
     getHotels,
     getHotel,
-    addHotel
+    addHotel,
+    changeHotel
 }
