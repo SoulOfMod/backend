@@ -3,7 +3,7 @@ const mongoose = require("mongoose")
 const hotelRoutes = require("./routes/hotelRoutes")
 const restaurantRoutes = require("./routes/restaurantRoutes")
 
-mongoose.connect("mongodb://localhost:27017/trippy", { useNewUrlParser: true, useUnifiedTopology: true }, (err) => {
+mongoose.connect("mongodb://localhost:27017/Trippy", { useNewUrlParser: true, useUnifiedTopology: true }, (err) => {
     if (err) {
         console.log("There was a problem when connection to the database")
     } else {
@@ -11,7 +11,7 @@ mongoose.connect("mongodb://localhost:27017/trippy", { useNewUrlParser: true, us
     }
 })
 
-const port = 9001
+const port = 8000
 
 const app = express()
 

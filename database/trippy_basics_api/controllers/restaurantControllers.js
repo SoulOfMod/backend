@@ -40,8 +40,66 @@ const addRestaurant = async (req, res) => {
     }
 }
 
+const changeRestaurant = async (req, res) => {
+
+    try {
+        const restaurantId = req.params.id
+        const restaurantQuery = req.query
+        // console.log("id", restaurantId);
+        // console.log("Query", restaurantQuery);
+        // console.log("Query name", restaurantQuery.name);
+        const restaurant = await restaurantModel.findOneAndUpdate({ _id: restaurantId },
+            { $set: {name: restaurantQuery.name } },
+            { new: true }
+        )
+
+
+        if (restaurant) {
+            res.json({
+                message: `The restaurant's name is updated to ${restaurantQuery.name}`
+            })
+        }
+
+
+    } catch (err) {
+        console.error(err)
+
+        res.status(500).json({ errorMessage: "There was a problem :(" })
+    }
+}
+
+const deleteRestaurant = async (req, res) => {
+
+    try {
+        const restaurantId = req.params.id
+        const restaurantQuery = req.query
+        // console.log("id", restaurantId);
+        // console.log("Query", restaurantQuery);
+        // console.log("Query name", restaurantQuery.name);
+        const restaurant = await restaurantModel.remove({ _id: restaurantId })
+
+
+        if (restaurant) {
+            res.json({
+                message: `The restaurant was removed`
+            })
+        }
+
+
+    } catch (err) {
+        console.error(err)
+
+        res.status(500).json({ errorMessage: "There was a problem :(" })
+    }
+}
+
+
+
+
 module.exports = {
     getRestaurants,
     getRestaurant,
-    addRestaurant
+    addRestaurant,
+    changeRestaurant,
+    deleteRestaurant
 }

@@ -48,7 +48,7 @@ const changeHotel = async (req, res) => {
         // console.log("id", hotelId);
         // console.log("Query", hotelQuery);
         // console.log("Query name", hotelQuery.name);
-        const hotel = await Hotel.findOneAndUpdate({ _id: hotelId },
+        const hotel = await hotelModel.findOneAndUpdate({ _id: hotelId },
             { $set: {name: hotelQuery.name } },
             { new: true }
         )
@@ -68,9 +68,35 @@ const changeHotel = async (req, res) => {
     }
 }
 
+const deleteHotel = async (req, res) => {
+
+    try {
+        const hotelId = req.params.id
+        const hotelQuery = req.query
+        // console.log("id", hotelId);
+        // console.log("Query", hotelQuery);
+        // console.log("Query name", hotelQuery.name);
+        const hotel = await hotelModel.remove({ _id: hotelId })
+
+
+        if (hotel) {
+            res.json({
+                message: `The hotel was removed`
+            })
+        }
+
+
+    } catch (err) {
+        console.error(err)
+
+        res.status(500).json({ errorMessage: "There was a problem :(" })
+    }
+}
+
 module.exports = {
     getHotels,
     getHotel,
     addHotel,
-    changeHotel
+    changeHotel,
+    deleteHotel
 }
