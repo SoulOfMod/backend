@@ -7,7 +7,7 @@ router.get("/", getRestaurants)
 
 router.get("/:id", getRestaurant)
 
-router.post("/", validationRestaurants,addRestaurant)
+router.post("/",addRestaurant)
 
 router.put("/:id", changeRestaurant)
 
